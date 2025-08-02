@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Officer Training Report Form</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        .patrol-form {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1.5px solid #000;  /*Более толстые границы*/
+            padding: 8px;
+            text-align: left;
+            font-family: Arial, sans-serif; /*Меняем шрифт (если нужно)*/
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 40%;
+        }
+
+        .category-separator {
+            background-color: #000; /* Черный фон */
+            color: #fff; /* Белый текст */
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 2px solid #000; /*Черная рамка*/
+        }
+
+        /*стилизация таблицы*/
+        table {
+            border: 2px solid black;
+        }
+        th, td {
+            border: 2px solid black;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="patrol-form">
+        <div class="category-separator">Информация об офицере</div>
+        <label for="traineeOfficer">Офицер Стажер:</label>
+        <input type="text" id="traineeOfficer" name="traineeOfficer" placeholder="[TRAINEE_OFFICER]">
+
+        <label for="trainingOfficer">Офицер Инструктор:</label>
+        <input type="text" id="trainingOfficer" name="trainingOfficer" placeholder="[TRAINING_OFFICER]">
+
+        <div class="category-separator">Описание деятельности</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Продолжительность</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="date1" placeholder="[DATE_1]"></td>
+                    <td><input type="text" name="duration1" placeholder="[DURATION_1]"></td>
+                    <td><textarea name="description1" placeholder="[DESCRIPTION_1]"></textarea></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="date2" placeholder="[DATE_2]"></td>
+                    <td><input type="text" name="duration2" placeholder="[DURATION_2]"></td>
+                    <td><textarea name="description2" placeholder="[DESCRIPTION_2]"></textarea></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="date3" placeholder="[DATE_3]"></td>
+                    <td><input type="text" name="duration3" placeholder="[DURATION_3]"></td>
+                    <td><textarea name="description3" placeholder="[DESCRIPTION_3]"></textarea></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="category-separator">Вердикт инструктора</div>
+
+        <label for="categoryVerdict">ГОТОВ ЛИ ПОЛУЧИТЬ ЗАЧЁТ ПО КАТЕГОРИИ?:</label>
+        <input type="text" id="categoryVerdict" name="categoryVerdict" placeholder="[CATEGORY_VERDICT]">
+
+        <button onclick="generateBBCode(); return false;">Сгенерировать BBCode</button>
+        <textarea id="bbcodeOutput" rows="10" cols="70" readonly></textarea>
+    </div>
+
+    <script>
+        function generateBBCode() {
+            const traineeOfficer = document.getElementById("traineeOfficer").value;
+            const trainingOfficer = document.getElementById("trainingOfficer").value;
+
+            const date1 = document.querySelector('input[name="date1"]').value;
+            const duration1 = document.querySelector('input[name="duration1"]').value;
+            const description1 = document.querySelector('textarea[name="description1"]').value;
+
+            const date2 = document.querySelector('input[name="date2"]').value;
+            const duration2 = document.querySelector('input[name="duration2"]').value;
+            const description2 = document.querySelector('textarea[name="description2"]').value;
+
+            const date3 = document.querySelector('input[name="date3"]').value;
+            const duration3 = document.querySelector('input[name="duration3"]').value;
+            const description3 = document.querySelector('textarea[name="description3"]').value;
+
+            const categoryVerdict = document.getElementById("categoryVerdict").value;
+
+            const bbcode = `[textarea]
+[center][size=90]ДЕПАРТАМЕНТ ПОЛИЦИИ ЛОС САНТОСА[/size]
+[size=105][b]ОРИЕНТАЦИЯ ОФИЦЕРОВ СТАЖЕРОВ[/b][/size]
+ОТЧЕТ ОБ ПАТРУЛЕ
+[/center]
+
+[hr][/hr]
+
+[b][u]ОФИЦЕР СТАЖЕР:[/u][/b] ${traineeOfficer}
+[b][u]ОФИЦЕР ИНСТРУКТОР:[/u][/b] ${trainingOfficer}
+
+[b]NARRATIVE DERECTIONS:[/b] Training Officers shall place their signature, serial no., and the date immediately following each entry and utilize the following four component headings: Incident/Task, Intervention, Training/ Remediation, and Response. A supplemental heading entitled "Additional" may be used, as necessary.
+
+[b]NOTE[/b]: Employees may provide a written response to any comment within 30 days of review.
+
+[hr][/hr]
+
+[tab=100]
+[tr]
+[td][b]ДАТА[/b][/td][td][b]ПРОДОЛЖИТЕЛЬНОСТЬ[/b][/td][td][b]ОПИСАНИЕ[/b][/td]
+[/tr]
+[tr]
+[td]${date1}[/td][td]${duration1}[/td][td]${description1}[/td]
+[/tr]
+[tr]
+[td]${date2}[/td][td]${duration2}[/td][td]${description2}[/td]
+[/tr]
+[tr]
+[td]${date3}[/td][td]${duration3}[/td][td]${description3}[/td]
+[/tr]
+[/tab]
+
+[borderb=#000000]
+[/borderb]
+
+[b][u]ГОТОВ ЛИ ПОЛУЧИТЬ ЗАЧЁТ ПО КАТЕГОРИИ?:[/u][/b] ${categoryVerdict}
+[/textarea]`;
+
+            document.getElementById("bbcodeOutput").value = bbcode;
+        }
+    </script>
+</body>
+</html>
