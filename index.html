@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LSPD Form Generators</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            width: 250px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s ease-in-out; /* Плавная анимация */
+        }
+
+        .card:hover {
+            transform: scale(1.05); /* Увеличение карточки при наведении */
+        }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card h3 {
+            margin: 0 0 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background-color 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Card 1 -->
+        <div class="card">
+            <img src="https://www.upload.ee/image/18420827/IMG_20250802_010510.jpg" alt="All Points Bulletin Form">
+            <div class="card-content">
+                <h3>All Points Bulletin Form</h3>
+                <p>Генератор формы подачи розыска офицерами полиции.</p>
+                <a href="apb.html" class="button">Заполнить</a>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card">
+            <img src="https://www.upload.ee/image/18421195/IMG_20250802_195533.png" alt="Backhome application Form">
+            <div class="card-content">
+                <h3>Backhome application Form</h3>
+                <p>Генератор заявления в программу восстановления.</p>
+                <a href="backhome.html" class="button">Заполнить</a>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card">
+            <img src="https://www.upload.ee/image/18421207/IMG_20250802_195523.jpg" alt="Daily Observation Report (FTEP)">
+            <div class="card-content">
+                <h3>Daily Observation Report (FTEP)</h3>
+                <p>Генератор создания отчет для офицеров инструкторов.</p>
+                <a href="ftp.html" class="button">Заполнить</a>
+            </div>
+        </div>
+
+        <!-- Card 4: Incident Report Form -->
+        <div class="card">
+            <img src="https://www.upload.ee/image/18427518/IMG_8328.png" alt="Incident Report Form"> <!--  Можете заменить на другую картинку, если есть -->
+            <div class="card-content">
+                <h3>Incident Report Form</h3>
+                <p>Генератор формы отчета об инциденте.</p>
+                <a href="ir.html" class="button">Заполнить</a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
