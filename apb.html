@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Points Bulletin Form</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 11px; /* Базовый размер шрифта */
+        }
+
+        /* Применяем box-sizing: border-box; ко всем элементам */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        .patrol-form {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 11px; /* Размер шрифта для label */
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 8px; /* Отступы в полях ввода */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            font-family: sans-serif;
+            font-size: 16px; /* Размер шрифта в полях ввода */
+            height: 34px; /* Высота input */
+        }
+
+        textarea {
+            height: 85px; /* Увеличиваем высоту textarea */
+            resize: none;
+            overflow: hidden;
+        }
+
+        .category-separator {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 2px solid #000;
+            font-size: 11px; /* Размер шрифта для заголовков */
+        }
+
+        button {
+            padding: 8px 15px;
+            font-size: 11px;
+        }
+
+        #bbcodeOutput {
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="patrol-form">
+        <div class="category-separator">Информация о подозреваемом</div>
+
+        <label for="incidentDate">1. ДАТА И ПРИМЕРНОЕ ВРЕМЯ ИНЦИДЕНТА:</label>
+        <input type="text" id="incidentDate" name="incidentDate" placeholder="заполнить">
+
+        <label for="suspectName">2. ИМЯ ФАМИЛИЯ ПОДОЗРЕВАЕМОГО(ЫХ):</label>
+        <input type="text" id="suspectName" name="suspectName" placeholder="заполнить">
+
+        <label for="suspectDescription">3. ОПИСАНИЕ:</label>
+        <textarea id="suspectDescription" name="suspectDescription" placeholder="заполнить"></textarea>
+
+        <label for="vehicleDescription">4. ОПИСАНИЕ Т/С:</label>
+        <textarea id="vehicleDescription" name="vehicleDescription" placeholder="заполнить"></textarea>  <!-- ЗАМЕНЕНО на textarea -->
+
+        <div class="category-separator">Информация о правонарушении</div>
+
+        <label for="offenseDescription">1. ОПИСАНИЕ ПРАВОНАРУШЕНИЯ:</label>
+        <textarea id="offenseDescription" name="offenseDescription" placeholder="заполнить"></textarea>
+
+        <label for="articles">2. СТАТЬИ:</label>
+        <textarea id="articles" name="articles" placeholder="заполнить"></textarea>  <!-- ЗАМЕНЕНО на textarea -->
+
+        <div class="category-separator">Инструкции для правоохранительных агенств</div>
+
+        <label for="contactVK">Связаться с (ВК):</label>
+        <input type="text" id="contactVK" name="contactVK" placeholder="ссылка">
+
+        <label for="imageLink">Фотографии подозреваемого/транспортного средства/места правонарушения:</label>
+        <input type="text" id="imageLink" name="imageLink" placeholder="ССЫЛКА НА ВАШЕ ИЗОБРАЖЕНИЕ (ИМГУР И ТП)">
+
+        <button onclick="generateBBCode(); return false;">Сгенерировать BBCode</button>
+        <textarea id="bbcodeOutput" rows="10" cols="70" readonly></textarea>
+    </div>
+
+    <script>
+        function generateBBCode() {
+            const incidentDate = document.getElementById("incidentDate").value;
+            const suspectName = document.getElementById("suspectName").value;
+            const suspectDescription = document.getElementById("suspectDescription").value;
+            const vehicleDescription = document.getElementById("vehicleDescription").value;
+            const offenseDescription = document.getElementById("offenseDescription").value;
+            const articles = document.getElementById("articles").value;
+            const contactVK = document.getElementById("contactVK").value;
+            const imageLink = document.getElementById("imageLink").value;
+
+            const bbcode = `[textarea]
+[head]DONALD FLETCHER[/head]
+
+[center][b][size=150]ALL POINTS BULLETIN[/size][/b][/center]
+[center][b][color=#FF0000]WANTED[/color][/b][/center]
+
+[hr][/hr]
+
+[center][b]ИНФОРМАЦИЯ О ПОДОЗРЕВАЕМОМ[/b][/center]
+
+1. [b]ДАТА И ПРИМЕРНОЕ ВРЕМЯ ИНЦИДЕНТА:[/b] ${incidentDate} 
+
+2. [b]ИМЯ ФАМИЛИЯ ПОДОЗРЕВАЕМОГО(ЫХ)[/b] ${suspectName} 
+
+3. [b]ОПИСАНИЕ:[/b] ${suspectDescription} 
+
+4. [b]ОПИСАНИЕ Т/С:[/b] ${vehicleDescription}
+
+[hr][/hr]
+
+[center][b]ИНФОРМАЦИЯ О ПРАВОНАРУШЕНИИ[/b][/center]
+
+1. [b]ОПИСАНИЕ ПРАВОНАРУШЕНИЯ:[/b] ${offenseDescription} 
+
+2. [b]СТАТЬИ:[/b] ${articles} 
+
+[hr][/hr]
+
+[center][b]ИНСТРУКЦИИ ДЛЯ ПРАВООХРАНИТЕЛЬНЫХ АГЕНСТВ:[/b][/center]
+
+ОСНОВАНИЯ НА АРЕСТ [b][color=#FF0000]ИМЕЮТСЯ.[/color][/b]
+
+[b]Связаться с (ВК):[/b] ${contactVK}
+
+[b]Фотографии подозреваемого/транспортного средства/места правонарушения:[/b]
+
+[img]${imageLink}[/img]
+
+[/textarea]`;
+
+            document.getElementById("bbcodeOutput").value = bbcode;
+        }
+    </script>
+</body>
+</html>
