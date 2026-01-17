@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Incident Report Form</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 12px; /* Устанавливаем базовый размер шрифта для всей страницы */
+        }
+
+        /* Применяем box-sizing: border-box; ко всем элементам */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        .incident-form {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 12px; /* Явно устанавливаем размер шрифта для label */
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-family: sans-serif;
+            font-size: 12px;
+            height: 24px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-family: sans-serif;
+            font-size: 12px;
+            height: 70px;
+            resize: none;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+            font-family: sans-serif;
+            font-size: 12px; /* Явно устанавливаем размер шрифта для th и td */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        /* Стили для select (выпадающие списки) в таблице */
+        td select {
+            width: 100%; /* Чтобы select занимал всю ширину ячейки */
+            padding: 6px; /* Немного меньше padding, чтобы соответствовать input */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: sans-serif;
+            font-size: 12px; /* Устанавливаем размер шрифта для select */
+            height: 24px; /* Задаем высоту, чтобы совпадала с input */
+        }
+
+        .category-separator {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 2px solid #000;
+            font-size: 12px; /* УМЕНЬШАЕМ РАЗМЕР ШРИФТА ДЛЯ ЭТИХ ЗАГОЛОВКОВ */
+        }
+
+        /* Текст КОДЫ: Ж - ЖЕРТВА... */
+        .codes-info {
+            text-align: center;
+            font-size: 10px; /* Еще меньше, чем 12px */
+            line-height: 1.2;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .add-row-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .copy-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        /* Стили для всплывающего уведомления */
+        #notification {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 14px;
+        }
+
+        #notification.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+</head>
+<body>
+    <div class="incident-form">
+        <div class="category-separator">Информация об офицере</div>
+
+        <label for="officerName">ОТ ОФИЦ.:</label>
+        <input type="text" id="officerName" name="officerName" placeholder="ЗАПОЛНИТЬ *ОТ ОФИЦ*">
+
+        <label for="officerNumber"># СОТРУДНИКА:</label>
+        <input type="text" id="officerNumber" name="officerNumber" placeholder="ЗАПОЛНИТЬ ОТ *# СОТРУДНИКА*">
+
+        <label for="department">ОТДЕЛ:</label>
+        <input type="text" id="department" name="department" placeholder="ЗАПОЛНИТЬ ОТДЕЛ">
+
+        <label for="vehicle">ЭКИПАЖ/АВТОМОБИЛЬ #:</label>
+        <input type="text" id="vehicle" name="vehicle" placeholder="ЗАПОЛНИТЬ *ЭКИПАЖ/АВТОМОБИЛЬ #*">
+
+        <div class="category-separator">Информация об инциденте</div>
+
+        <label for="incidentLocation">ЛОКАЦИЯ ИНЦИДЕНТА:</label>
+        <input type="text" id="incidentLocation" name="incidentLocation" placeholder="ЗАПОЛНИТЬ *ЛОКАЦИЯ ИНЦИДЕНТА*">
+
+        <label for="incidentDateTime">ДАТА, ВРЕМЯ, ДЕНЬ:</label>
+        <input type="text" id="incidentDateTime" name="incidentDateTime" placeholder="ЗАПОЛНИТЬ *ДАТА, ВРЕМЯ, ДЕНЬ*">
+
+        <label for="charges">ОБВИНЕНИЯ:</label>
+        <input type="text" id="charges" name="charges" placeholder="ЗАПОЛНИТЬ *ОБВИНЕНИЯ*">
+
+        <div class="category-separator">Информация об участниках</div>
+
+         <p class="codes-info">
+            КОДЫ: Ж - ЖЕРТВА — С - СВИДЕТЕЛЬ — И - ИНФОРМАТОР — З - ЗАЯВИТЕЛЬ — П - ПОДОЗРЕВАЕМЫЙ
+        </p>
+
+        <!-- ТАБЛИЦА УЧАСТНИКОВ С ID -->
+        <table id="participantsTable">
+            <thead>
+                <tr>
+                    <th>КОД</th>
+                    <th>ИМЯ ФАМИЛИЯ</th>
+                    <th>КОНТАКТНАЯ ИНФОРМАЦИЯ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Начальные 4 строки -->
+                <tr>
+                    <td>
+                        <select name="code1">
+                            <option value="П">П</option>
+                            <option value="Ж">Ж</option>
+                            <option value="С">С</option>
+                            <option value="И">И</option>
+                            <option value="З">З</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="name1" placeholder="*ИФ1*"></td>
+                    <td><input type="text" name="info1" placeholder="*ИНФОРМАЦИЯ1*"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <select name="code2">
+                            <option value="П">П</option>
+                            <option value="Ж">Ж</option>
+                            <option value="С">С</option>
+                            <option value="И">И</option>
+                            <option value="З">З</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="name2" placeholder="*ИФ2*"></td>
+                    <td><input type="text" name="info2" placeholder="*ИНФОРМАЦИЯ2*"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <select name="code3">
+                            <option value="П">П</option>
+                            <option value="Ж">Ж</option>
+                            <option value="С">С</option>
+                            <option value="И">И</option>
+                            <option value="З">З</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="name3" placeholder="*ИФ3*"></td>
+                    <td><input type="text" name="info3" placeholder="*ИНФОРМАЦИЯ3*"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <select name="code4">
+                            <option value="П">П</option>
+                            <option value="Ж">Ж</option>
+                            <option value="С">С</option>
+                            <option value="И">И</option>
+                            <option value="З">З</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="name4" placeholder="*ИФ4*"></td>
+                    <td><input type="text" name="info4" placeholder="*ИНФОРМАЦИЯ4*"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <button class="action-btn add-row-btn" onclick="addRow();">Добавить участника</button>
+
+        <div class="category-separator">ПОВЕСТВОВАНИЕ</div>
+        <textarea id="narrative" name="narrative" placeholder="ЗАПОЛНИТЬ"></textarea>
+
+        <div class="category-separator">УЛИКИ</div>
+        <textarea id="evidence" name="evidence" placeholder="Заполнить улики списком"></textarea>
+
+        <!-- Кнопка СКОПИРОВАТЬ -->
+        <button class="action-btn copy-btn" onclick="copyBBCode(); return false;">Скопировать BBCode</button>
+
+        <!-- Уведомление о копировании -->
+        <div id="notification">BBCode скопирован в буфер обмена!</div>
+    </div>
+
+    <script>
+        let participantCount = 4;
+
+        // --- ФУНКЦИЯ ДОБАВЛЕНИЯ СТРОКИ ---
+        function addRow() {
+            participantCount++;
+            const tableBody = document.querySelector('#participantsTable tbody');
+            
+            // HTML для новой строки
+            const newRowHTML = `
+                <tr>
+                    <td>
+                        <select name="code${participantCount}">
+                            <option value="П">П</option>
+                            <option value="Ж">Ж</option>
+                            <option value="С">С</option>
+                            <option value="И">И</option>
+                            <option value="З">З</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="name${participantCount}" placeholder="*ИФ${participantCount}*"></td>
+                    <td><input type="text" name="info${participantCount}" placeholder="*ИНФОРМАЦИЯ${participantCount}*"></td>
+                </tr>
+            `;
+            
+            tableBody.insertAdjacentHTML('beforeend', newRowHTML);
+        }
+
+        // --- ФУНКЦИЯ КОПИРОВАНИЯ В БУФЕР ОБМЕНА ---
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Показать уведомление об успехе
+                const notification = document.getElementById("notification");
+                notification.innerText = "BBCode скопирован в буфер обмена!";
+                notification.className = "show";
+                setTimeout(function(){ 
+                    notification.className = notification.className.replace("show", ""); 
+                }, 3000);
+            }).catch(err => {
+                console.error('Ошибка копирования: ', err);
+                // Если navigator.clipboard не работает (старые браузеры), можно добавить fallback
+                alert('Не удалось скопировать автоматически. Пожалуйста, выделите и скопируйте текст из поля вывода вручную.');
+            });
+        }
+
+
+        // --- ФУНКЦИЯ ГЕНЕРАЦИИ И КОПИРОВАНИЯ BBCODE ---
+        function copyBBCode() {
+            // Сбор общих данных
+            const officerName = document.getElementById("officerName").value;
+            const officerNumber = document.getElementById("officerNumber").value;
+            const department = document.getElementById("department").value;
+            const vehicle = document.getElementById("vehicle").value;
+            const incidentLocation = document.getElementById("incidentLocation").value;
+            const incidentDateTime = document.getElementById("incidentDateTime").value;
+            const charges = document.getElementById("charges").value;
+            const narrative = document.getElementById("narrative").value;
+            const evidence = document.getElementById("evidence").value;
+            
+            // Сбор данных из ВСЕХ строк таблицы (включая добавленные)
+            let participantRows = '';
+            
+            const rows = document.querySelectorAll('#participantsTable tbody tr');
+            
+            rows.forEach((row, index) => {
+                // Поскольку имена полей теперь динамические (code5, name5, info5 и т.д.), 
+                // мы ищем элементы по их порядковому номеру внутри конкретной строки.
+                const codeSelect = row.querySelector(`select`);
+                const nameInput = row.querySelectorAll('input[type="text"]')[0];
+                const infoInput = row.querySelectorAll('input[type="text"]')[1];
+                
+                if (codeSelect && nameInput && infoInput) {
+                    const code = codeSelect.value;
+                    const name = nameInput.value;
+                    const info = infoInput.value;
+                    
+                    // Формируем строку BBCode для текущего участника
+                    participantRows += `[tr][td]${code}[/td][td]${name}[/td][td]${info}[/td][/tr]`;
+                }
+            });
+
+            // --- КОМПОНОВКА ИТОГОВОГО BBCODE ---
+            const bbcode = `[textarea]
+[lssd-header][/lssd-header]
+
+[block=#000000][/block]
+[center][size=130][b]ОТЧЕТ ОБ ИНЦИДЕНТЕ[/b][/size][/center]
+[size=120][center][b]СВОДКА[/b][/center][/size]
+Офицер полиции заполняет основную информацию об инциденте, предоставляет информацию о времени и локации произошедшего. Офицер полиции заполняет личную информацию о себе включая имя, фамилию, значок, отдел и экипаж.
+[hr][/hr]
+
+[table=100][tr][td][b]ОТ ОФИЦ.[/b][/td][td][b]# СОТРУДНИКА[/b][/td][td][b]ОТДЕЛ[/b][/td][td][b]ЭКИПАЖ/АВТОМОБИЛЬ #[/b][/td][/tr][tr][td]${officerName}[/td][td]${officerNumber}[/td][td]${department}[/td][td]${vehicle}[/td][/tr][/table][table=100][tr][td][b]ЛОКАЦИЯ ИНЦИДЕНТА[/b][/td][td][b]ДАТА, ВРЕМЯ, ДЕНЬ[/b][/td][td][b]ОБВИНЕНИЯ[/b][/td][/tr][tr][td]${incidentLocation}[/td][td]${incidentDateTime}[/td][td]${charges}[/td][/tr][/table]
+
+[hr][/hr]
+[size=120][center][b]ИНФОРМАЦИЯ ОБ УЧАСТНИКАХ[/b][/center][/size][center]Заполнить информацию о пострадавших или подозреваемых, которые были вовлечены в инцидент, если они были идентифицированы.[/center]
+
+[center]КОДЫ: Ж - ЖЕРТВА — С - СВИДЕТЕЛЬ — И - ИНФОРМАТОР — З - ЗАЯВИТЕЛЬ — П - ПОДОЗРЕВАЕМЫЙ[/center]
+
+[table=100][tr][td][b]КОД[/b][/td][td][b]ИМЯ ФАМИЛИЯ[/b][/td][td][b]КОНТАКТНАЯ ИНФОРМАЦИЯ[/b][/td][/tr]
+${participantRows}
+[/table]
+
+[hr][/hr]
+[size=120][center][b]ПОВЕСТВОВАНИЕ[/b][/center][/size][center]Заполнить историю от начала до вашего уезда. Описать все действия предпринятые вами.[/center]
+
+[doc_b=ОПИСАНИЕ]${narrative}[/doc_b]
+
+[size=120][center][b]УЛИКИ[/b][/center][/size][center]Записать все нелегальные вещи, которые были найдены[/center]
+
+[doc]${evidence}[/doc][/textarea]`;
+
+            copyToClipboard(bbcode);
+        }
+    </script>
+</body>
+</html>
