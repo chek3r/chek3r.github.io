@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LSSD Incident Report Form Generator</title>
+    <meta charset="UTF-8">
+    <style>
+        /* СТИЛИ ВЗЯТЫ ИЗ ФАЙЛА irLSSD (Оформление сохранено) */
+        body {
+            font-family: sans-serif;
+            font-size: 12px; 
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        .incident-form {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 12px; 
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-family: sans-serif;
+            font-size: 12px;
+            height: 24px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-family: sans-serif;
+            font-size: 12px;
+            height: 70px;
+            resize: none;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+            font-family: sans-serif;
+            font-size: 12px; 
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        td select {
+            width: 100%; 
+            padding: 6px; 
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: sans-serif;
+            font-size: 12px; 
+            height: 24px; 
+        }
+
+        .category-separator {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 2px solid #000;
+            font-size: 12px; 
+        }
+
+        .codes-info {
+            text-align: center;
+            font-size: 10px; 
+            line-height: 1.2;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .add-row-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .copy-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #notification {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 14px;
+        }
+
+        #notification.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+</head>
+<body>
+    <div class="incident-form">
+        
+        <!-- Секция Офицера/Сводка (LSSD Наполнение) -->
+        <div class="category-separator">ИНФОРМАЦИЯ О ДЕЛЕ</div>
+        
+        <label for="caseFile">УГОЛОВНОЕ ДЕЛО N:</label>
+        <input type="text" id="caseFile" name="caseFile" placeholder="XXXX">
+
+        <div class="category-separator">ОТВЕТСТВЕННЫЕ ПОМОЩНИКИ (СЛЕДСТВЕННАЯ ГРУППА)</div>
+
+        <label for="officerName">СЕРЖАНТ, Ведущий детектив:</label>
+        <input type="text" id="officerName" name="officerName" placeholder="ИМЯ ФАМИЛИЯ">
+
+        <label for="officerNumber">ПОМОЩНИК 1 (БОНУС):</label>
+        <input type="text" id="officerNumber" name="officerNumber" placeholder="ИМЯ ФАМИЛИЯ">
+
+        <label for="department">ПОМОЩНИК 2 (БОНУС):</label>
+        <input type="text" id="department" name="department" placeholder="ИМЯ ФАМИЛИЯ">
+
+        <label for="vehicle">ПОМОЩНИК 3 (БОНУС):</label>
+        <input type="text" id="vehicle" name="vehicle" placeholder="ИМЯ ФАМИЛИЯ">
+        
+        <label for="extraStaff1">ПОМОЩНИК 4 (БОНУС):</label>
+        <input type="text" id="extraStaff1" name="extraStaff1" placeholder="ИМЯ ФАМИЛИЯ">
+
+
+        <!-- Секция ФАБУЛА (Одно большое поле) -->
+        <div class="category-separator">ФАБУЛА (ОПИСАНИЕ ДЕЙСТВИЙ)</div>
+        <textarea id="narrative" name="narrative" placeholder="ИНФОРМАТИВНОЕ ОПИСАНИЕ"></textarea>
+
+
+        <!-- Секция ПОДОЗРЕВАЕМЫЕ (БЛОЧНАЯ СТРУКТУРА, ИМИТИРУЮЩАЯ КАРТИНКУ LSSD) -->
+        <div class="category-separator">ПОДОЗРЕВАЕМЫЕ</div>
+
+         <p class="codes-info">
+            КОДЫ: Ж - ЖЕРТВА — С - СВИДЕТЕЛЬ — И - ИНФОРМАТОР — З - ЗАЯВИТЕЛЬ — П - ПОДОЗРЕВАЕМЫЙ
+        </p>
+        
+        <div id="suspectsContainer">
+            <!-- Блоки подозреваемых будут вставляться сюда -->
+        </div>
+        
+        <button class="action-btn add-row-btn" onclick="addSuspectBlock(); return false;">Добавить ПОДОЗРЕВАЕМОГО</button>
+
+        <!-- Секция ПРИЛОЖЕНИЯ (С ДИНАМИЧЕСКИМИ СПОЙЛЕРАМИ) -->
+        <div class="category-separator">ПРИЛОЖЕНИЯ</div>
+        <p class="codes-info" style="text-align: left; margin-left: 10px;">
+            Прикладываются все сопутствующие описи/отчеты/рапорты и т.п. документация, связанная с уголовным делом.
+        </p>
+        
+        <div id="evidenceContainer">
+            <!-- Здесь будут генерироваться спойлеры приложений -->
+            <!-- Начальное приложение 1 -->
+            <div id="app_1" style="margin-bottom: 10px;">
+                <input type="text" name="app_title1" value="ПРИЛОЖЕНИЕ 1" style="width: 30%; display: inline-block; height: 24px; margin-bottom: 0; margin-right: 5px;">
+                <textarea name="app_content1" placeholder="СОДЕРЖИМОЕ ПРИЛОЖЕНИЯ 1" style="height: 50px; width: calc(100% - 130px); margin-bottom: 0;"></textarea>
+                <button onclick="removeAppBlock(1); return false;" style="background-color: #dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; margin-left: 5px; font-size: 10px;">X</button>
+            </div>
+        </div>
+        
+        <button class="action-btn add-row-btn" onclick="addAppBlock(); return false;">Добавить ПРИЛОЖЕНИЕ</button>
+        
+        <!-- Кнопка КОПИРОВАТЬ -->
+        <button class="action-btn copy-btn" onclick="copyBBCode(); return false;">Скопировать BBCode</button>
+
+        <!-- Уведомление о копировании -->
+        <div id="notification">BBCode скопирован в буфер обмена!</div>
+    </div>
+
+    <script>
+        let suspectCount = 0;
+        let appCount = 1; // Начинаем с 1
+
+        // --- ФУНКЦИЯ ДОБАВЛЕНИЯ БЛОКА ПОДОЗРЕВАЕМОГО ---
+        function addSuspectBlock() {
+            suspectCount++;
+            const container = document.getElementById('suspectsContainer');
+            
+            const newBlockHTML = `
+                <div id="suspect_${suspectCount}" style="margin-bottom: 25px;">
+                    <div class="category-separator" style="font-size: 10px; padding: 5px; margin: 10px 0;">ПОДОЗРЕВАЕМЫЙ #${suspectCount}</div>
+                    
+                    <div style="display: flex; align-items: flex-start;">
+                        <div style="flex-shrink: 0; margin-right: 15px; padding-top: 5px;">
+                            <img src="" 
+                                 style="width: 50px; height: auto; border: 1px solid #000;">
+                        </div>
+                        
+                        <div style="flex-grow: 1;">
+                            <input type="text" name="suspect_name${suspectCount}" placeholder="1. ИМЯ ФАМИЛИЯ" style="margin-bottom: 5px;">
+                            <input type="text" name="suspect_contact${suspectCount}" placeholder="2. КОНТАКТНЫЕ ДАННЫЕ" style="margin-bottom: 5px;">
+                            <input type="text" name="suspect_address${suspectCount}" placeholder="3. АДРЕС ПРОЖИВАНИЯ" style="margin-bottom: 5px;">
+                            <input type="text" name="suspect_charges${suspectCount}" placeholder="4. СТАТЬИ" style="margin-bottom: 5px;">
+                            <input type="text" name="suspect_note${suspectCount}" placeholder="5. ПРИМЕЧАНИЕ" style="margin-bottom: 0;">
+                        </div>
+                        <button onclick="removeSuspectBlock(${suspectCount}); return false;" style="background-color: #dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; margin-left: 10px; margin-top: 5px; font-size: 10px;">Удалить</button>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', newBlockHTML);
+        }
+        
+        function removeSuspectBlock(id) {
+            const element = document.getElementById(`suspect_${id}`);
+            if (element) {
+                element.remove();
+            }
+        }
+        
+        // --- ЛОГИКА ДЛЯ ПРИЛОЖЕНИЙ (СПОЙЛЕРОВ) ---
+        function addAppBlock() {
+            appCount++;
+            const container = document.getElementById('evidenceContainer');
+            
+            const newAppHTML = `
+                <div id="app_${appCount}" style="margin-bottom: 10px;">
+                    <input type="text" name="app_title${appCount}" value="ПРИЛОЖЕНИЕ ${appCount}" style="width: 30%; display: inline-block; height: 24px; margin-bottom: 0; margin-right: 5px;">
+                    <textarea name="app_content${appCount}" placeholder="СОДЕРЖИМОЕ ПРИЛОЖЕНИЯ ${appCount}" style="height: 50px; width: calc(100% - 130px); margin-bottom: 0;"></textarea>
+                    <button onclick="removeAppBlock(${appCount}); return false;" style="background-color: #dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; margin-left: 5px; font-size: 10px;">X</button>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', newAppHTML);
+        }
+        
+        function removeAppBlock(id) {
+            const element = document.getElementById(`app_${id}`);
+            if (element) {
+                element.remove();
+            }
+        }
+        
+        function copyToClipboard(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const notification = document.getElementById("notification");
+                    notification.innerText = "BBCode скопирован в буфер обмена!";
+                    notification.className = "show";
+                    setTimeout(function(){ 
+                        notification.className = notification.className.replace("show", ""); 
+                    }, 3000);
+                }).catch(err => {
+                    console.error('Ошибка копирования: ', err);
+                    alert('Не удалось скопировать автоматически. Пожалуйста, выделите и скопируйте текст вручную.');
+                });
+            } else {
+                alert('Ваш браузер не поддерживает автоматическое копирование.');
+            }
+        }
+
+
+        // --- ФУНКЦИЯ ГЕНЕРАЦИИ BBCODE (ФИНАЛЬНАЯ СИНТЕЗА LSSD BBCODE) ---
+        function copyBBCode() {
+            // Сбор данных
+            const caseFile = document.getElementById("caseFile").value;
+            const officerName = document.getElementById("officerName").value;
+            const officerNumber = document.getElementById("officerNumber").value;
+            const department = document.getElementById("department").value;
+            const vehicle = document.getElementById("vehicle").value;
+            const extraStaff1Val = document.getElementById("extraStaff1").value;
+            
+            const narrative = document.getElementById("narrative").value; // [doc_b=ОПИСАНИЕ]
+            
+            // Сбор данных приложений (спойлеров)
+            let evidenceBlocks = '';
+            const appDivs = document.querySelectorAll('#evidenceContainer > div');
+            
+            appDivs.forEach((div, index) => {
+                const appNum = index + 1;
+                const titleInput = div.querySelector(`input[name^="app_title"]`);
+                const contentTextarea = div.querySelector(`textarea[name^="app_content"]`);
+                
+                if (titleInput && contentTextarea) {
+                    const title = titleInput.value || `ПРИЛОЖЕНИЕ ${appNum}`;
+                    const content = contentTextarea.value;
+                    
+                    evidenceBlocks += `[spoilername=${title}]${content}[/spoilername]\n`;
+                }
+            });
+            
+            // Сбор данных подозреваемых
+            let suspectBlocks = '';
+            const suspects = document.querySelectorAll('#suspectsContainer > div');
+            
+            suspects.forEach((block, index) => {
+                const count = index + 1;
+                
+                const name = block.querySelector(`input[name^="suspect_name"]`).value;
+                const contact = block.querySelector(`input[name^="suspect_contact"]`).value;
+                const address = block.querySelector(`input[name^="suspect_address"]`).value;
+                const crimeArticles = block.querySelector(`input[name^="suspect_charges"]`).value;
+                const note = block.querySelector(`input[name^="suspect_note"]`).value;
+
+                // СТРУКТУРА LSSD: Нумерация всегда начинается с 1. (повторяется для каждого блока, как на картинке)
+                const suspectBlockHTML = `
+                    [float=left][image=100]https://sun9-8.userapi.com/s/v1/ig2/FJvMMKN0swJd032Obnt0AfcyhcFfQNubsbfjj7iDwe0fj9fQvkB0DCGNnkDwLibuh1iX63RTx9sThBweDFfZDrtx.jpg?quality=95&as=32x46,48x69,72x104,108x156,160x231,240x347,360x520,452x653&from=bu&cs=452x0[/image][/float][size=110][b][u]1.[/u]ИМЯ ФАМИЛИЯ[/b][/size]
+                    ${name || 'ЗАПОЛНИТЬ'}
+                    [u]2.[/u][size=110][b]КОНТАКТНЫЕ ДАННЫЕ[/b][/size]
+                    ${contact || 'ЗАПОЛНИТЬ'}
+                    [u]3.[/u][size=110][b]АДРЕС ПРОЖИВАНИЯ[/b][/size]
+                    ${address || 'ЗАПОЛНИТЬ'}
+                    [u]4.[/u][size=110][b]СТАТЬИ[/b][/size]
+                    ${crimeArticles || 'ЗАПОЛНИТЬ'}
+                    [u]5.[/u][size=110][b]ПРИМЕЧАНИЕ[/b][/size]
+                    ${note || 'ЗАПОЛНИТЬ'}
+                    `;
+                
+                suspectBlocks += suspectBlockHTML;
+            });
+            
+            // Привязываем данные формы к полям в шаблоне LSSD
+            const staff1 = officerName || "ИМЯ ФАМИЛИЯ"; 
+            const staff2 = officerNumber || "ИМЯ ФАМИЛИЯ"; 
+            const staff3 = department || "ИМЯ ФАМИЛИЯ"; 
+            const staff4 = vehicle || "ИМЯ ФАМИЛИЯ"; 
+            const staff5 = extraStaff1Val || "ИМЯ ФАМИЛИЯ"; 
+
+
+            // --- КОМПОНОВКА ИТОГОВОГО BBCODE LSSD ---
+            const bbcode = `[textarea]
+[center][size=130][b]ДЕПАРТАМЕНТ ШЕРИФА ОКРУГА ЛОС САНТОСА[/b][/size][/center]
+[float=left][image=100]https://sun9-17.userapi.com/s/v1/ig2/3LnFvLbW-FXZ1ZwMdgnTHTDteookBRxDu3oDCDyYSh2knbL7vvHQDPDWlwR2AHvwUwQAfp9fOP7eMtaY_oT0RPOC.jpg?quality=95&as=32x36,48x53,72x80,108x120,160x178,240x267,288x320&from=bu&u=EFSTgDCFhbR9hi0Or_38Nsg2tBlW1fnPcS-e8s-vAyA&cs=288x0[/image][/float]
+
+[size=120][b]БЮРО ПО РАССЛЕДОВАНИЮ ОСОБО ТЯЖКИХ ПРЕСТУПЛЕНИЙ[/b][/size]
+ФОРМА XX-XXXX
+УГОЛОВНОЕ ДЕЛО N${caseFile}
+
+[block=#000000][/block]
+[center][size=110][b]ОТВЕТСТВЕННЫЕ ПОМОЩНИКИ (СЛЕДСТВЕННАЯ ГРУППА)[/b][/size][/center]
+[float=left][image=20]https://sun9-35.userapi.com/s/v1/ig2/B3v8WUFRb8-mZcpy9xU1xSbcHT5OlaZFMG_M-KHlbIce78JpspT0wkaDbLZ79dL-t6T4ym0WyC_4Dm3c94KLEoz3.jpg?quality=95&as=32x40,40x50&from=bu&cs=40x0[/image][/float][size=115][color=#BF0000][b]СЕРЖАНТ[/b][/color], Ведущий детектив[/size]
+${staff1}
+
+[float=left][image=20]https://sun9-67.userapi.com/s/v1/ig2/RpSiZOinpwDyofJl0lrYdYmpCTrpZeWwXQItOH9-dzLoMQ46B8lNLvPLzbroeVWlVlICcEV1EESgAi1peNl-wGKX.jpg?quality=95&as=32x35,40x44&from=bu&cs=40x0[/image][/float][size=115][color=#004000][b]ПОМОЩНИК ШЕРИФА (БОНУС)[/b][/color], Детектив[/size]
+${staff2}
+
+[float=left][image=20]https://sun9-67.userapi.com/s/v1/ig2/RpSiZOinpwDyofJl0lrYdYmpCTrpZeWwXQItOH9-dzLoMQ46B8lNLvPLzbroeVWlVlICcEV1EESgAi1peNl-wGKX.jpg?quality=95&as=32x35,40x44&from=bu&cs=40x0[/image][/float][size=115][color=#004000][b]ПОМОЩНИК ШЕРИФА (БОНУС)[/b][/color], Детектив[/size]
+${staff3}
+
+[float=left][image=20]https://sun9-67.userapi.com/s/v1/ig2/RpSiZOinpwDyofJl0lrYdYmpCTrpZeWwXQItOH9-dzLoMQ46B8lNLvPLzbroeVWlVlICcEV1EESgAi1peNl-wGKX.jpg?quality=95&as=32x35,40x44&from=bu&cs=40x0[/image][/float][size=115][color=#004000][b]ПОМОЩНИК ШЕРИФА (БОНУС)[/b][/color], Детектив[/size]
+${staff4}
+
+[block=#000000][/block]
+[center][size=110][b]ФАБУЛА[/b][/size][/center]
+Информативно описать в письменном виде суть совершенного преступления, хронологию и известные факты следствию.
+ 
+[doc_b=ОПИСАНИЕ]${narrative}[/doc_b]
+
+[block=#000000][/block]
+[center][size=110][b]ПОДОЗРЕВАЕМЫЕ[/b][/size][/center]
+В кратком виде заполнить подозреваемых в совершенном преступлении, выставить приоритеты и степени опасности. 
+
+${suspectBlocks}
+
+[block=#000000][/block]
+[center][size=110][b]ПРИЛОЖЕНИЯ[/b][/size][/center]
+Прикладываются все сопутствующие описи/отчеты/рапорты и т.п. документация, связанная с уголовным делом.
+${evidenceBlocks}
+[warning]ВСЯ ДОКУМЕНТАЦИЯ СТРОГО КОНФИДЕНЦИАЛЬНА. ЛЮБОЕ РАСПРОСТРАНИЕ ИНФОРМАЦИИ БЕЗ СОГЛАСИЯ И УВЕДОМЛЕНИЯ РУКОВОДСТВА ЗАПРЕЩЕНА. КОПИРОВАНИЕ ОРИГИНАЛЬНЫХ БЛАНКОВ ЗАПРЕЩЕНО.[/warning][/textarea]`;
+
+            copyToClipboard(bbcode);
+        }
+
+        // Инициализация формы 
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализируем 4 блока подозреваемых
+            addSuspectBlock();
+            addSuspectBlock();
+            addSuspectBlock();
+            addSuspectBlock();
+            
+            // Инициализируем 1 блок приложений (чтобы counter appCount=1 был верен)
+        });
+    </script>
+</body>
+</html>
